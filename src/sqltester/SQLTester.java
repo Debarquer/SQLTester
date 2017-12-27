@@ -33,20 +33,28 @@ public class SQLTester {
         public JLabel dataLabel;
         
         DataObjectPanel(SQLTest.DataObject dobject){
-            pkLabel.setText(Integer.toString(dobject.pk));
+            
+            pkLabel = new JLabel();
+            dataLabel = new JLabel();
+            
+            String pk = Integer.toString(dobject.pk);
+            
+            //System.out.println("pki " + dobject.pk);
+            //System.out.println("pks " + pk);
+            pkLabel.setText(pk);
             dataLabel.setText("<html>" + dobject.data);
             
             mainPanel = new JPanel();
             mainPanel.setLayout(new GridLayout(1, 2));
-            mainPanel.setBackground(Color.red);
+            mainPanel.setBackground(Color.white);
             
             pkPanel = new JPanel();
             pkPanel.setLayout(new GridLayout(1, 1));
-            pkPanel.setBackground(Color.green);
+            pkPanel.setBackground(Color.white);
             
             dataPanel = new JPanel();
             dataPanel.setLayout(new GridLayout(1, 1));
-            dataPanel.setBackground(Color.blue);
+            dataPanel.setBackground(Color.white);
             
             mainPanel.add(pkPanel);
             mainPanel.add(dataPanel);
@@ -92,7 +100,6 @@ public class SQLTester {
     private static JPanel controlPanelSubB;
     private static JPanel sidePanel;
     private static JLabel sideLabel;
-    
     /**
      * @param args the command line arguments
      */
@@ -242,12 +249,14 @@ public class SQLTester {
         
         //sideLabel = new JLabel("Side label", JLabel.CENTER);
         sidePanel = new JPanel();
-        sidePanel.setLayout(new FlowLayout());
+        sidePanel.setLayout(new GridLayout(100, 2));
         sidePanel.setBackground(Color.red);
-
+        sideLabel = new JLabel("Side Panel");
+        sidePanel.add(sideLabel);
+        
         //mainFrame.add(headerLabel);
         mainFrame.add(controlPanel);
-        sidePanel.add(statusLabel);
+        controlPanelSubB.add(statusLabel);
         controlPanel.add(controlPanelSubA);
         controlPanel.add(controlPanelSubB);
         mainFrame.add(sidePanel);
@@ -370,23 +379,39 @@ public class SQLTester {
       mainFrame.setVisible(true); 
    }
    private class ButtonClickListener implements ActionListener{
+      @Override
       public void actionPerformed(ActionEvent e) {
          String command = e.getActionCommand();  
          
          if( command.equals( "OK" ))  {
             statusLabel.setText("Ok Button clicked.");
          } else if( command.equals( "Submit" ) )  {
-            //statusLabel.setText("Submit Button clicked."); 
+            //statusLabel.setText("Submit Button clicked.");
+            
             ArrayList<SQLTest.DataObject> arr = sql.printFromDatabase("things");
+            
             //String labelString = "";
             for(int i = 0; i < arr.size(); i++){
                 SQLTest.DataObject tmp = arr.get(i);
+                
                 //labelString += tmp.toString();
-                dataObjectPanels.add(new DataObjectPanel(tmp));
+                
+                
+                
+                DataObjectPanel tmpObjPan = new DataObjectPanel(tmp);
+                
+                //System.out.println("Printing.. ...end function");
+                //continue;
+                
+                dataObjectPanels.add(tmpObjPan);
+                
+                //System.out.println("Printing.. " + tmp.toString() + "...end function");
+                //continue;
+                
                 //tmpDobjectPanel.Initiate(tmp);
                 sidePanel.add(dataObjectPanels.get(dataObjectPanels.size() - 1).getMainPanel());
                 
-                System.out.println(dataObjectPanels.get(dataObjectPanels.size() - 1).dataLabel);
+                System.out.println("data: " + dataObjectPanels.get(dataObjectPanels.size() - 1).dataLabel.toString());
             }
          } else {
             statusLabel.setText("Cancel Button clicked.");
